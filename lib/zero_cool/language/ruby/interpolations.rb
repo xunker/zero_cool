@@ -102,11 +102,19 @@ class ZeroCool::Language::Ruby::Interpolations < ZeroCool::Language::Interpolati
   def i_equality_check
     [
       lambda { "#{i_variable_name} #{i_equality_symbol} #{i_random_number_0_10}" },
+      lambda { "#{i_variable_name} #{i_equality_symbol} #{i_variable_name}" },
+      lambda { "#{i_random_number_0_10} #{i_equality_symbol} #{i_variable_name}" }
+    ].sample.call
+  end
+
+  def i_object_boolean_check
+    [
       lambda { "#{i_variable_name}.is_a?(#{i_class_name})" },
       lambda { "#{i_variable_name}.present?" },
       lambda { "#{i_variable_name}.blank?" },
       lambda { "#{i_variable_name}.nil?" },
       lambda { "#{i_variable_name}.empty?" },
+      lambda { "#{i_variable_name}.42?" },
     ].sample.call
   end
 

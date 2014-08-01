@@ -24,6 +24,10 @@ class ZeroCool::Language
     @@containers[language_name]
   end
 
+  def self.container_classes
+    @@containers[language_name].map(&:last)
+  end
+
   def containers
     self.class.containers
   end

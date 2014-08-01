@@ -6,6 +6,8 @@ require 'zero_cool/language/interpolations'
 require 'zero_cool/language/ruby'
 require 'zero_cool/language/ruby/container'
 require 'zero_cool/language/ruby/container/classes'
+require 'zero_cool/language/ruby/container/methods'
+require 'zero_cool/language/ruby/container/loops'
 require 'zero_cool/language/ruby/interpolations'
 
 require 'zero_cool/language/python'
