@@ -102,8 +102,7 @@ class ZeroCool::Language::Ruby::Interpolations < ZeroCool::Language::Interpolati
   def i_equality_check
     [
       lambda { "#{i_variable_name} #{i_equality_symbol} #{i_random_number_0_10}" },
-      lambda { "#{i_variable_name} #{i_equality_symbol} #{i_variable_name}" },
-      lambda { "#{i_random_number_0_10} #{i_equality_symbol} #{i_variable_name}" }
+      lambda { "#{i_variable_name} #{i_equality_symbol} #{i_variable_name}" }
     ].sample.call
   end
 
@@ -123,5 +122,9 @@ class ZeroCool::Language::Ruby::Interpolations < ZeroCool::Language::Interpolati
       %w[ file directory socket port link stream symbol ],
       %w[ processor reader writer linker embedder ruiner ]
     ].map(&:sample).join('_')
+  end
+
+  def i_complex_assertion
+    rand(10) >= 5 ? i_equality_check : i_object_boolean_check
   end
 end

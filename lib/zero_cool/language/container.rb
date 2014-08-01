@@ -19,7 +19,10 @@ class ZeroCool::Language::Container
 
   def initialize(options={})
     # bring in variables set on the class level
-    %i[ @opening_text @closing_text @container_type @parent_types].each do |ivar|
+    %i[
+      @opening_text @closing_text @container_type
+      @parent_types @default_weight @parent_weights
+    ].each do |ivar|
       instance_variable_set(ivar, self.class.instance_variable_get(ivar))
     end
     @parent_types ||= [] # make sure this is an array
@@ -29,17 +32,45 @@ class ZeroCool::Language::Container
   def generate(options = {})
     indentation = (options[:indentation] || @indentation).to_i
     output = [indentation_string*indentation + @opening_text]
+    
     # find all containers or elements that can be children of this container
-    raise 'make this random with weights'
-    container_classes.select{|c| c.has_parent_type?(@container_type) }.each do |c|
-      output << c.generate(indentation: indentation+1)
+    # container_classes.select{|c| c.has_parent_type?(@container_type) }.each do |c|
+    #   output << c.generate(indentation: indentation+1)
+    # end
+
+    sub_containers = container_classes.select{|c| c.has_parent_type?(@container_type) }
+    elements = element_classes.select{|c| c.has_parent_type?(@container_type) }
+
+    # beginning elements
+    if bp = elements.select(&:beginning_position?).sample
+      output << bp.generate(indentation: indentation+1)
     end
+
+    3.times do
+      no_position = elements.select(&:no_position?)
+      if e_or_c = (sub_containers + no_position).sample
+        output << e_or_c.generate(indentation: indentation+1)
+      end
+    end
+
+    if ep = elements.select(&:end_position?).sample
+      output << ep.generate(indentation: indentation+1)
+    end
+
     output << indentation_string*indentation + @closing_text
     output.map do |s|
       language_class.interpolate(s)
     end.join(language_class.line_ending)
   end
   alias :to_s :generate
+
+  def self.root_container?
+    @parent_types.nil? || @parent_types.empty?
+  end
+
+  def root_container?
+    self.class.root_container?
+  end
 
   def self.has_parent_type?(parent_type)
     (@parent_types || []).include?(parent_type)
@@ -84,9 +115,26 @@ class ZeroCool::Language::Container
     language_class.container_classes
   end
 
+  def elements
+    language_class.elements
+  end
+
+  def element_classes
+    language_class.element_classes
+  end
+
   def indentation_string
     language_class.indentation_string
   end
+
+  def self.default_weight(weight=0)
+    @default_weight = weight.to_i
+  end
+
+  def self.weight(weight=0)
+    default_weight(weight)
+  end
+
 
 protected
 

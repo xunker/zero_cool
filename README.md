@@ -75,19 +75,19 @@ end
 ** NOTE: NONE OF THIS ACTUALLY WORKS YET **
 
 One day there will be instructions on using the command-line tool, the gem,
-and documentationn about how to build your own rule set to generate code
+and documentation about how to build your own rule set to generate code
 in other programming languages.
 
 ## Contributing
 
-You think you're hardcore enough to improve this?  Pft. Then you must be
-31337 enough to hack the Gibson with your P6 chip and add the code yourself.
-What, did your mom buy you a 'puter for christmas?
+You think you're hardcore enough to improve this?  Then you must be
+31337 enough to hack the Gibson with your P6 chip and change the code
+yourself. What, did your mom buy you a 'puter for christmas?
 
 ## License
 
 Distributed under a license that's just like GPL v2.0, except if you break 
-the terms I'll hack your HR Department's database and you declared...
+the terms I'll hack your HR Department's database and have you declared...
 
     Dead.
 
