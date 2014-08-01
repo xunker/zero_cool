@@ -46,7 +46,15 @@ class ZeroCool::Language
     end
   end
 
+  def self.interpolate(string)
+    interpolations.parse(string)
+  end
+
 private
+
+  def self.interpolations
+    @interpolations ||= self.interpolation_class.new
+  end
 
   def language_name
     self.class.language_name

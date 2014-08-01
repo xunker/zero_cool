@@ -27,7 +27,9 @@ class ZeroCool::Language::Container
   def generate(options = {})
     output = [@opening_text]
     output << @closing_text
-    output.join(language_class.line_ending)
+    output.map do |s|
+      language_class.interpolate(s)
+    end.join(language_class.line_ending)
   end
   alias :to_s :generate
 
