@@ -26,6 +26,12 @@ CONTAINERS = {
     closing_text: 'end',
     parent_types: [ :class ],
     type: :method,
+  },
+  while_loop: {
+    opening_text: 'while __VARIABLE_NAME__ __EQUALITY_CHECK__ __RANDOM_NUMBER_0_100__ do',
+    closing_text: 'end',
+    parent_types: [ :method ],
+    type: :loop
   }
 }
 
@@ -61,6 +67,16 @@ ELEMENTS = {
     parent_types: [ :method ],
     text: 'return nil',
     position: :end
+  },
+  include_module: {
+    parent_types: [ :class, :method ],
+    text: 'include __CLASS_NAME__',
+    position: :beginning
+  },
+  require_file: {
+    parent_types: [ :class, :method ],
+    text: "require '__BARE_FILE_NAME__'",
+    position: :beginning
   }
 }
 
@@ -173,6 +189,13 @@ class Interpolation
       lambda { "#{i_variable_name}.nil?" },
       lambda { "#{i_variable_name}.empty?" },
     ].sample.call
+  end
+
+  def i_bare_file_name
+    [
+      %w[ file directory socket port link stream symbol ],
+      %w[ processor reader writer linker embedder ruiner ]
+    ].map(&:sample).join('_')
   end
 end
 
