@@ -1,0 +1,3 @@
+class ZeroCool::Base
+  
+end
