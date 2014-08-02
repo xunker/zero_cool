@@ -1,6 +1,8 @@
 class ZeroCool::Language::Python::Element::BareMethodCall < ZeroCool::Language::Python::Element
   text '__METHOD_NAME__()'
   parent_types [ :function, :loop, :if ]
+  # prepend_newlines 0..2
+  # append_newlines 0..2
 end
 ZeroCool::Language::Python::Element::BareMethodCall.register!
 
@@ -36,17 +38,3 @@ class ZeroCool::Language::Python::Element::ExplicitBareReturn < ZeroCool::Langua
   position :end
 end
 ZeroCool::Language::Python::Element::ExplicitBareReturn.register!
-
-# class ZeroCool::Language::Python::Element::IncludeModule < ZeroCool::Language::Python::Element
-#   text 'include __CLASS_NAME__'
-#   parent_type :class
-#   position :beginning
-# end
-# ZeroCool::Language::Python::Element::IncludeModule.register!
-
-# class ZeroCool::Language::Python::Element::RequireFile < ZeroCool::Language::Python::Element
-#   text "require '__BARE_FILE_NAME__'"
-#   parent_type :class
-#   position :beginning
-# end
-# ZeroCool::Language::Python::Element::RequireFile.register!

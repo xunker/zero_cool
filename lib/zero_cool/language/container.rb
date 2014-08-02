@@ -23,6 +23,8 @@ class ZeroCool::Language::Container
       @opening_text @closing_text @container_type
       @parent_types @default_weight @parent_weights
       @no_content_indentation
+      @prepend_newlines @append_newlines
+      @prepend_padding_newlines @append_padding_newlines
     ].each do |ivar|
       instance_variable_set(ivar, self.class.instance_variable_get(ivar))
     end
@@ -32,12 +34,15 @@ class ZeroCool::Language::Container
 
   def generate(options = {})
     indentation = (options[:indentation] || @indentation).to_i
-    output = [indentation_string*indentation + @opening_text.to_s]
+
+    output = []
+
+    prepend_newlines.times { output << '' }
+
+    output << indentation_string*indentation + @opening_text.to_s
+    prepend_padding_newlines.times { output << '' }
     
     # find all containers or elements that can be children of this container
-    # container_classes.select{|c| c.has_parent_type?(@container_type) }.each do |c|
-    #   output << c.generate(indentation: indentation+1)
-    # end
 
     sub_containers = container_classes.select{|c| c.has_parent_type?(@container_type) }
     elements = element_classes.select{|c| c.has_parent_type?(@container_type) }
@@ -47,7 +52,7 @@ class ZeroCool::Language::Container
       output << bp.generate(indentation: indentation+1)
     end
 
-    3.times do
+    1.times do
       no_position = elements.select(&:no_position?)
       if e_or_c = (sub_containers + no_position).sample
         output << e_or_c.generate(indentation: indentation + (@no_content_indentation ? 0 : 1))
@@ -58,7 +63,12 @@ class ZeroCool::Language::Container
       output << ep.generate(indentation: indentation+1)
     end
 
+    append_padding_newlines.times { output << '' }
+
     output << indentation_string*indentation + @closing_text.to_s
+
+    append_newlines.times { output << '' }
+
     output.map do |s|
       language_class.interpolate(s)
     end.join(language_class.line_ending)
@@ -110,6 +120,82 @@ class ZeroCool::Language::Container
 
   def self.no_content_indentation(orly=false)
     @no_content_indentation = !!orly
+  end
+
+  def prepend_newlines?
+    !@prepend_newlines.nil?
+  end
+
+  def prepend_newlines
+    prepend_newlines? ? @prepend_newlines.call.to_i : 0
+  end
+
+  # accepts integer, two integers (max, max) or range
+  def self.prepend_newlines(min=0, max=nil)
+    @prepend_newlines = if min && max && max.to_i > min.to_i
+      lambda { (min.to_i..max.to_i).to_a.sample }
+    elsif min.is_a?(Range)
+      lambda { min.to_a.sample }
+    else
+      lambda { min.to_i }
+    end
+  end
+
+  def append_newlines?
+    !@append_newlines.nil?
+  end
+
+  def append_newlines
+    append_newlines? ? @append_newlines.call.to_i : 0
+  end
+
+  # accepts integer, two integers (max, max) or range
+  def self.append_newlines(min=0, max=nil)
+    @append_newlines = if min && max && max.to_i > min.to_i
+      lambda { (min.to_i..max.to_i).to_a.sample }
+    elsif min.is_a?(Range)
+      lambda { min.to_a.sample }
+    else
+      lambda { min.to_i }
+    end
+  end
+
+  def prepend_padding_newlines?
+    !@prepend_padding_newlines.nil?
+  end
+
+  def prepend_padding_newlines
+    prepend_padding_newlines? ? @prepend_padding_newlines.call : 0
+  end
+
+  # accepts integer, two integers (max, max) or range
+  def self.prepend_padding_newlines(min=0, max=nil)
+    @prepend_padding_newlines = if min && max && max.to_i > min.to_i
+      lambda { (min.to_i..max.to_i).to_a.sample }
+    elsif min.is_a?(Range)
+      lambda { min.to_a.sample }
+    else
+      lambda { min.to_i }
+    end
+  end
+
+  def append_padding_newlines?
+    !@append_padding_newlines.nil?
+  end
+
+  def append_padding_newlines
+    append_padding_newlines? ? @append_padding_newlines.call : 0
+  end
+
+  # accepts integer, two integers (max, max) or range
+  def self.append_padding_newlines(min=0, max=nil)
+    @append_padding_newlines = if min && max && max.to_i > min.to_i
+      lambda { (min.to_i..max.to_i).to_a.sample }
+    elsif min.is_a?(Range)
+      lambda { min.to_a.sample }
+    else
+      lambda { min.to_i }
+    end
   end
 
   def containers

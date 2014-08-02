@@ -21,6 +21,7 @@ class ZeroCool::Language::Element
     # bring in variables set on the class level
     %i[
       @text @position @parent_types @default_weight @parent_weights
+      @prepend_newlines @append_newlines
     ].each do |ivar|
       instance_variable_set(ivar, self.class.instance_variable_get(ivar))
     end
@@ -30,7 +31,11 @@ class ZeroCool::Language::Element
 
   def generate(options = {})
     indentation = (options[:indentation] || @indentation).to_i
-    indentation_string*indentation + language_class.interpolate(@text.to_s)
+
+    str = indentation_string*indentation + language_class.interpolate(@text.to_s)
+    str = language_class.line_ending*prepend_newlines + str if prepend_newlines?
+    str = str + language_class.line_ending*append_newlines if append_newlines?
+    str
   end
   alias :to_s :generate
 
@@ -82,6 +87,44 @@ class ZeroCool::Language::Element
   
   def self.position(pos)
     @position = pos.to_sym
+  end
+
+  def prepend_newlines?
+    !@prepend_newlines.nil?
+  end
+
+  def prepend_newlines
+    prepend_newlines? ? @prepend_newlines.call : 0
+  end
+
+  # accepts integer, two integers (max, max) or range
+  def self.prepend_newlines(min=0, max=nil)
+    @prepend_newlines = if min && max && max.to_i > min.to_i
+      lambda { (min.to_i..max.to_i).to_a.sample }
+    elsif min.is_a?(Range)
+      lambda { min.to_a.sample }
+    else
+      lambda { min.to_i }
+    end
+  end
+
+  def append_newlines?
+    !@append_newlines.nil?
+  end
+
+  def append_newlines
+    append_newlines? ? @append_newlines.call : 0
+  end
+
+  # accepts integer, two integers (max, max) or range
+  def self.append_newlines(min=0, max=nil)
+    @append_newlines = if min && max && max.to_i > min.to_i
+      lambda { (min.to_i..max.to_i).to_a.sample }
+    elsif min.is_a?(Range)
+      lambda { min.to_a.sample }
+    else
+      lambda { min.to_i }
+    end
   end
 
   def indentation_string
