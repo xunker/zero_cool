@@ -1,5 +1,5 @@
 class ZeroCool::Language::Container
-  attr_reader :opening_text, :closing_text, :container_type, :parent_types, :indentation
+  attr_reader :opening_text, :closing_text, :container_type, :parent_types, :indentation, :no_content_indentation
 
   def self.container_name
     underscore(self.name.split('::').last).downcase.to_sym
@@ -22,6 +22,7 @@ class ZeroCool::Language::Container
     %i[
       @opening_text @closing_text @container_type
       @parent_types @default_weight @parent_weights
+      @no_content_indentation
     ].each do |ivar|
       instance_variable_set(ivar, self.class.instance_variable_get(ivar))
     end
@@ -31,7 +32,7 @@ class ZeroCool::Language::Container
 
   def generate(options = {})
     indentation = (options[:indentation] || @indentation).to_i
-    output = [indentation_string*indentation + @opening_text]
+    output = [indentation_string*indentation + @opening_text.to_s]
     
     # find all containers or elements that can be children of this container
     # container_classes.select{|c| c.has_parent_type?(@container_type) }.each do |c|
@@ -49,7 +50,7 @@ class ZeroCool::Language::Container
     3.times do
       no_position = elements.select(&:no_position?)
       if e_or_c = (sub_containers + no_position).sample
-        output << e_or_c.generate(indentation: indentation+1)
+        output << e_or_c.generate(indentation: indentation + (@no_content_indentation ? 0 : 1))
       end
     end
 
@@ -57,7 +58,7 @@ class ZeroCool::Language::Container
       output << ep.generate(indentation: indentation+1)
     end
 
-    output << indentation_string*indentation + @closing_text
+    output << indentation_string*indentation + @closing_text.to_s
     output.map do |s|
       language_class.interpolate(s)
     end.join(language_class.line_ending)
@@ -106,6 +107,10 @@ class ZeroCool::Language::Container
   end
   
   def self.type(type_sym=nil); container_type(type_sym); end
+
+  def self.no_content_indentation(orly=false)
+    @no_content_indentation = !!orly
+  end
 
   def containers
     language_class.containers

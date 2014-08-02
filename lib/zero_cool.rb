@@ -15,8 +15,9 @@ require 'zero_cool/language/ruby/interpolations'
 
 require 'zero_cool/language/python'
 require 'zero_cool/language/python/container'
-require 'zero_cool/language/python/container/classes'
+require 'zero_cool/language/python/container/containers'
 require 'zero_cool/language/python/element'
+require 'zero_cool/language/python/element/elements'
 require 'zero_cool/language/python/interpolations'
 
 # Dir[File.dirname(__FILE__) + '/zero_cool/language/**/*.rb'].each do |file|

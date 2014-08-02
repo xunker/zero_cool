@@ -30,7 +30,7 @@ class ZeroCool::Language::Element
 
   def generate(options = {})
     indentation = (options[:indentation] || @indentation).to_i
-    indentation_string*indentation + language_class.interpolate(@text)
+    indentation_string*indentation + language_class.interpolate(@text.to_s)
   end
   alias :to_s :generate
 

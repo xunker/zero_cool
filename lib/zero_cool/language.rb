@@ -9,6 +9,18 @@ class ZeroCool::Language
   # :language => [ { element_name: <element class> }, ... ]
   @@elements = {}
 
+  def self.line_ending
+    "\n"
+  end
+
+  def self.indentation_string
+    "\t"
+  end
+
+  def self.interpolation_class
+    raise NotImplementedError
+  end
+
   def self.inherited(subclass)
     subclass_name = subclass.to_s
     unless subclass_name =~ LANGUAGE_CLASS_PATTERN
