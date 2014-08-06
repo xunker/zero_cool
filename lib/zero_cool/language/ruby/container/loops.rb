@@ -4,4 +4,3 @@ class ZeroCool::Language::Ruby::Container::WhileLoop < ZeroCool::Language::Ruby:
   parent_types [ :method ]
   container_type :loop
 end
-ZeroCool::Language::Ruby::Container::WhileLoop.register!

@@ -1,6 +1,16 @@
 class ZeroCool::Language::Container
   attr_reader :opening_text, :closing_text, :container_type, :parent_types, :indentation, :no_content_indentation
 
+  @@subclasses = []
+
+  def self.inherited(subclass)
+    @@subclasses << subclass
+  end
+
+  def self.subclasses
+    @@subclasses
+  end
+
   def self.container_name
     underscore(self.name.split('::').last).downcase.to_sym
   end

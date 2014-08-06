@@ -4,7 +4,6 @@ class ZeroCool::Language::Ruby::Container::InstanceMethodWithArguments < ZeroCoo
   parent_types [ :class ]
   type :method
 end
-ZeroCool::Language::Ruby::Container::InstanceMethodWithArguments.register!
 
 class ZeroCool::Language::Ruby::Container::InstanceMethodWithNoArguments < ZeroCool::Language::Ruby::Container 
   opening_text 'def __METHOD_NAME__'
@@ -12,4 +11,3 @@ class ZeroCool::Language::Ruby::Container::InstanceMethodWithNoArguments < ZeroC
   parent_type :class
   type :method
 end
-ZeroCool::Language::Ruby::Container::InstanceMethodWithNoArguments.register!

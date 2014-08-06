@@ -1,6 +1,16 @@
 class ZeroCool::Language::Element
   attr_reader :text, :position, :parent_types
 
+  @@subclasses = []
+
+  def self.inherited(subclass)
+    @@subclasses << subclass
+  end
+
+  def self.subclasses
+    @@subclasses
+  end
+
   def self.element_name
     underscore(self.name.split('::').last).downcase.to_sym
   end

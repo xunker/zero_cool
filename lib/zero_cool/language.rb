@@ -13,6 +13,19 @@ class ZeroCool::Language
   #  :language => [ { element_name: <element class> }, ... ]
   @@elements = {}
 
+  def initialize
+    # register all containers and elements for this language
+    
+    ZeroCool::Language::Container.subclasses.select do |klass|
+      klass.language_class == self.class
+    end.each(&:register!)
+
+    ZeroCool::Language::Element.subclasses.select do |klass|
+      klass.language_class == self.class
+    end.each(&:register!)
+    
+  end
+
   def self.line_ending
     "\n"
   end
