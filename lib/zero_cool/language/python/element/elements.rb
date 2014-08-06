@@ -38,3 +38,21 @@ class ZeroCool::Language::Python::Element::ExplicitBareReturn < ZeroCool::Langua
   position :end
 end
 ZeroCool::Language::Python::Element::ExplicitBareReturn.register!
+
+class ZeroCool::Language::Python::Element::ClassInitStatement < ZeroCool::Language::Python::Element
+  text do
+    'self.__VARIABLE_NAME__ = __EMPTY_DATA_STRUCTURE__'
+  end
+  position :beginning
+  parent_types [ :class_init ]
+end
+ZeroCool::Language::Python::Element::ClassInitStatement.register!
+
+class ZeroCool::Language::Python::Element::OpeningVariableInFile < ZeroCool::Language::Python::Element
+  text do
+    '__VARIABLE_NAME__ = __EMPTY_DATA_STRUCTURE__'
+  end
+  position :beginning
+  parent_types [ :file ]
+end
+ZeroCool::Language::Python::Element::OpeningVariableInFile.register!

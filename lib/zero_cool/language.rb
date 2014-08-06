@@ -1,12 +1,16 @@
 class ZeroCool::Language
   LANGUAGE_CLASS_PATTERN = /^ZeroCool::Language::([A-Z][A-Za-z0-9]+)$/
-  # Class => :language
+
+  # Are Class Methods the best way load the state of the world like this?
+  # I'm not sure any more.. Revisit this later.
+  # @@languages format:
+  #  Class => :language
   @@languages = {}
-
-  # :language => [ { container_name: <container class> }, ... ]
+  # @@containers format:
+  #  :language => [ { container_name: <container class> }, ... ]
   @@containers = {}
-
-  # :language => [ { element_name: <element class> }, ... ]
+  # @@elements format:
+  #  :language => [ { element_name: <element class> }, ... ]
   @@elements = {}
 
   def self.line_ending

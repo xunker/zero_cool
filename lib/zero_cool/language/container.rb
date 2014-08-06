@@ -49,10 +49,10 @@ class ZeroCool::Language::Container
 
     # beginning elements
     if bp = elements.select(&:beginning_position?).sample
-      output << bp.generate(indentation: indentation+1)
+      output << bp.generate(indentation: indentation + (@no_content_indentation ? 0 : 1))
     end
 
-    1.times do
+    3.times do
       no_position = elements.select(&:no_position?)
       if e_or_c = (sub_containers + no_position).sample
         output << e_or_c.generate(indentation: indentation + (@no_content_indentation ? 0 : 1))

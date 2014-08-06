@@ -66,9 +66,20 @@ class ZeroCool::Language::Python::Interpolations < ZeroCool::Language::Interpola
     ].sample.call
   end
 
-
   def i_complex_assertion
     rand(10) >= 5 ? i_equality_check : i_property_check
+  end
+
+  def i_class_name
+    [
+      %w[ User Purchase Author Book Page Database Origin Purpose ],
+      %w[ Processor Creator Updater Scanner Reader Writer Output Input Stream ],
+      %w[ Factory Model Migration Validator Manager Maker ]
+    ].map(&:sample).join
+  end
+
+  def i_empty_data_structure
+    [ '{}', '[]', '""', "''"].sample
   end
 
 end
